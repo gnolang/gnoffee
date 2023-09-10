@@ -14,11 +14,6 @@
 // gnoffee-specific keywords into their comment directive equivalents,
 // paving the way for the second stage to handle the transpiling logic.
 //
-// However, it's important to note that while gnoffee resides in the gnovm
-// namespace, it operates independently from the gnovm. There's potential
-// for gnoffee to be relocated in the future based on its evolving role
-// and development trajectory.
-//
 // Future Changes:
 // As the Go and Gno ecosystems and requirements evolve, gnoffee might see the
 // introduction of new keywords or alterations to its current functionality.
