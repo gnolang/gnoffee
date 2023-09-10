@@ -11,7 +11,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/gnolang/gno/gnovm/pkg/gnoffee"
+	"github.com/gnolang/gnoffee/pkg/gnoffee"
 )
 
 var writeFlag bool

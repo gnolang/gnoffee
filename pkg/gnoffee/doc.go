@@ -14,10 +14,6 @@
 // gnoffee-specific keywords into their comment directive equivalents,
 // paving the way for the second stage to handle the transpiling logic.
 //
-// The Package Path:
-// Gnoffee is currently housed under the gnovm namespace, with the
-// package path being: github.com/gnolang/gno/gnovm/pkg/gnoffee.
-//
 // However, it's important to note that while gnoffee resides in the gnovm
 // namespace, it operates independently from the gnovm. There's potential
 // for gnoffee to be relocated in the future based on its evolving role

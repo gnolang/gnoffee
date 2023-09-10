@@ -15,13 +15,13 @@ func TestTest(t *testing.T) {
 
 func setupTestScript(t *testing.T, txtarDir string) testscript.Params {
 	t.Helper()
-	// Get root location of github.com/gnolang/gno
+	// Get root location of github.com/gnolang/gnoffee
 	goModPath, err := exec.Command("go", "env", "GOMOD").CombinedOutput()
 	require.NoError(t, err)
 	rootDir := filepath.Dir(string(goModPath))
 	// Build a fresh gno binary in a temp directory
 	gnoffeeBin := filepath.Join(t.TempDir(), "gnoffee")
-	err = exec.Command("go", "build", "-o", gnoffeeBin, filepath.Join(rootDir, "gnovm", "cmd", "gnoffee")).Run()
+	err = exec.Command("go", "build", "-o", gnoffeeBin, filepath.Join(rootDir, "cmd", "gnoffee")).Run()
 	require.NoError(t, err)
 	// Define script params
 	return testscript.Params{
