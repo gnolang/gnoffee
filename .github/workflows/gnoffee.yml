@@ -1,0 +1,83 @@
+name: gnoffee
+
+on:
+  pull_request:
+    paths:
+      - "go.sum"
+      - "**.go"
+      - "**.gnoffee"
+      - ".github/workflows/gnoffee.yml"
+  push:
+    branches: [ "main" ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version:
+          - "1.20.x"
+          - "1.21.x"
+        goarch:
+          - "amd64"
+        goos:
+          - "linux"
+        program:
+          - "gnoffee"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go-version }}
+      - uses: actions/checkout@v3
+      - name: go install
+        run: GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go install ./cmd/${{ matrix.program }}
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version:
+          - "1.20.x"
+          - "1.21.x"
+        args:
+          - "test"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go-version }}
+      - uses: actions/checkout@v3
+      - name: test
+        run: |
+          export GOPATH=$HOME/go
+          export GOTEST_FLAGS="-v -p 1 -timeout=30m -coverprofile=coverage.out -covermode=atomic"
+          make ${{ matrix.args }}
+      #- if: runner.os == 'Linux'
+      #  uses: codecov/codecov-action@v3
+      #  with:
+      #    token: ${{ secrets.CODECOV_TOKEN }}
+      #    name: gnoffee
+      #    flags: gnoffee,gnoffee-${{matrix.args}},go-${{ matrix.go-version }}
+      #    files: ./coverage.out
+      #    #fail_ci_if_error: ${{ github.repository == 'gnolang/gnoffee' }}
+      #    fail_ci_if_error: false # temporarily
+
+  #docker-integration:
+  #  strategy:
+  #    fail-fast: false
+  #  runs-on: ubuntu-latest
+  #  timeout-minutes: 10
+  #  steps:
+  #    - uses: actions/checkout@v3
+  #    # TODO: setup docker caching
+  #    - run: make test.docker
+  #    - run: docker logs int_gnoffee || true
+
+  # TODO: docker-less integration test?
